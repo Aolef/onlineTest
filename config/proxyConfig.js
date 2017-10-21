@@ -1,0 +1,11 @@
+module.exports={
+	proxyList:{
+	   '/oles/':{
+	        target:"http://localhost:8080/oles/",
+	        changeOrigin:true,
+	        pathRewrite:{
+	            '^/oles':""
+	    }
+	    	}
+	}
+}
