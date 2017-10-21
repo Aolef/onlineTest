@@ -29,7 +29,7 @@ export default {
         }
     },
     //TODO include a update property here for update the menu when the data was updated
-    data: function() {
+    data() {
         return {
             //menu data for showing in the nav bar
             //TODO should be linked to the navBar content after the update methods was built
