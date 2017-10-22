@@ -11,7 +11,7 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(0)">作答题目一</el-button>
+				<el-button type="primary" @click="answer(problems[0].id)">作答题目一</el-button>
 			</el-col>
 		</el-row>
 		<el-row>
@@ -25,7 +25,7 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(1)">作答题目二</el-button>
+				<el-button type="primary" @click="answer(problems[1].id)">作答题目二</el-button>
 			</el-col>
 		</el-row>
 		<el-row>
@@ -39,14 +39,14 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(2)">作答题目三</el-button>
+				<el-button type="primary" @click="answer(problems[2].id)">作答题目三</el-button>
 			</el-col>
 		</el-row>
 		<el-dialog
 		  title="开始作答"
 		  :visible.sync="isAnswerDialogVisible"
 		  size="large"
-		  :before-close="handleClose">
+		  >
 		  <el-row>
 			<el-col :span="24">
 				<el-input
@@ -118,18 +118,20 @@
 				})
 			},
 			answer(id){
-				this.currentTest = this.problems[id].contents
+				alert(id)
 				var url = this.HOST + '/addStuTestDetail'
 				this.currentStudentTestDetail.testDetail=id
 				this.$http.post(url,this.currentStudentTestDetail).then(response=>{
 					if(!response.data.answerWithAlgorithmSign){
-						this.isThoughtDisVisible=true
-						this.isAnswerDialogVisible=false
+						this.isThoughtDisVisible=false
+						this.isCodeDisVisible=true
 					}else{
 						this.isThoughtDisVisible=response.data.answerWithAlgorithmSign
 						this.isAnswerDialogVisible=response.data.answerWithCodeSign
 					}
 					this.studentTestDetail = response.data
+					this.currentTest=this.studentTestDetail.studentTestDetail.testDetail.contents
+					console.log(response.data)
 					this.thought=response.data.answerWithAlgorithm
 					this.code=response.data.answerWithCode
 				})
