@@ -1,7 +1,5 @@
 <template>
 <div>
-	
-
 	<el-row>
 		<el-table
 		:data="testBasicData"
