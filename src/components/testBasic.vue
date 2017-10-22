@@ -26,7 +26,7 @@
 				label="考试时间"
 				></el-table-column>	
 				<el-table-column
-				prop="isToConduct"
+				prop="toConduct"
 				label="当前考试"
 				></el-table-column>		
 				</el-table>
@@ -148,22 +148,26 @@
 			<el-form :model="addTestDetailData">
 				<el-form-item
 				label="题目">
-					<el-input v-model="addTestDetailData.contents"></el-input>
+					<el-input type="textarea" :rows="3" v-model="addTestDetailData.contents"></el-input>
 				</el-form-item>
 				<el-form-item
 				label="试卷类型">
-					<el-select v-model="addTestDetailData.kind" placeholder="请选择">
-					    <el-option
-					      v-for="item in allKinds"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-				  	</el-select>
+					<el-col :span='7'>
+						<el-select v-model="addTestDetailData.kind" placeholder="请选择">
+						    <el-option
+						      v-for="item in allKinds"
+						      :key="item.value"
+						      :label="item.label"
+						      :value="item.value">
+						    </el-option>
+					  	</el-select>
+				  	</el-col>
 				</el-form-item>
 				<el-form-item
 				label="满分">
-					<el-input v-model="addTestDetailData.fullScore"></el-input>
+					<el-col :span='6'>
+						<el-input v-model="addTestDetailData.fullScore"></el-input>
+					</el-col>			
 				</el-form-item>
 				<el-button @click="saveAddTestDetail">确定</el-button>
 				<el-button @click="cancelAddTestDetail">取消</el-button>
@@ -289,6 +293,13 @@ import msgDialog from '../components/common/msgDialog.vue'
 				this.$http.get(url).then(response=>{
 					this.testBasicData=response.data.rows
 					this.testBasicDataTotal=response.data.total
+					for(var item in this.testBasicData){
+						if (this.testBasicData[item].toConduct==null) {
+							this.testBasicData[item].toConduct='否'
+						}else{
+							this.testBasicData[item].toConduct='是'
+						}
+					}
 				}).catch(response=>{
 					this.$refs.msgDialog.confirm("获取所有考试信息失败!")
 				})
@@ -401,14 +412,16 @@ import msgDialog from '../components/common/msgDialog.vue'
 			        });
 				}
 			},
-			addTestDetail:function(){
-				this.showAddDetailDialog=true
+			addTestDetail:function(){		
+				if (this.currentRowId=='') {
+					this.$refs.msgDialog.confirm("请选择一次考试!")
+				}else{
+					this.showAddDetailDialog=true
+				}
 			},
 			saveAddTestDetail:function(){
 				var url = this.HOST+'/addTestDetail'
 				this.addTestDetailData.test=this.currentRowId
-				// this.addTestDetailData.kind='A'
-				console.log(JSON.stringify(this.addTestDetailData))
 				this.$http.post(url,this.addTestDetailData).then(response=>{
 					this.getAllTestDetailData()
 					this.$refs.msgDialog.notify("成功添加考试题目！")
@@ -420,6 +433,14 @@ import msgDialog from '../components/common/msgDialog.vue'
 				}).catch(response=>{
 					this.$refs.msgDialog.notify("添加考试题目失败！")
 				})
+			},
+			cancelAddTestDetail:function(){
+				this.addTestDetailData.contents=''
+				this.addTestDetailData.kind=''
+				this.addTestDetailData.fullScore=''
+				this.addTestDetailData.test=''
+				this.showAddDetailDialog=false
+				this.$refs.msgDialog.notify("已取消添加考试题目！")
 			},
 			editTestDetail:function(){
 				if (this.currentTestDetailId=='') {
@@ -446,8 +467,18 @@ import msgDialog from '../components/common/msgDialog.vue'
 					this.currentTestDetailId=''
 					this.showEditDetailDialog=false
 				}).catch(response=>{
-					this.$refs.msgDialog.notify("修改考试失败！")
+					this.$refs.msgDialog.notify("修改考试题目失败！")
 				})
+			},
+			cancelEditTestDetail:function(){
+				this.editTestDetailData.id=''
+				this.editTestDetailData.contents=''
+				this.editTestDetailData.kind=''
+				this.editTestDetailData.fullScore=''
+				this.editTestDetailData.test=''
+				this.currentTestDetailId=''
+				this.showEditDetailDialog=false
+				this.$refs.msgDialog.notify("已取消修改题目！")
 			},
 			deleteTestDetail:function(){
 				if (this.currentTestDetailId=='') {
