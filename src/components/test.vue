@@ -11,7 +11,7 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(problems[0].id)">作答题目一</el-button>
+				<el-button type="primary" @click="answer(problems[0].id,0)">作答题目一</el-button>
 			</el-col>
 		</el-row>
 		<el-row>
@@ -25,7 +25,7 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(problems[1].id)">作答题目二</el-button>
+				<el-button type="primary" @click="answer(problems[1].id,1)">作答题目二</el-button>
 			</el-col>
 		</el-row>
 		<el-row>
@@ -39,7 +39,7 @@
 				</el-input>
 			</el-col>
 			<el-col :span="4">
-				<el-button type="primary" @click="answer(problems[2].id)">作答题目三</el-button>
+				<el-button type="primary" @click="answer(problems[2].id,2)">作答题目三</el-button>
 			</el-col>
 		</el-row>
 		<el-dialog
@@ -97,8 +97,8 @@
 				code:'',
 				currentTest:'',
 				isAnswerDialogVisible:false,
-				isThoughtDisVisible:false,
-				isCodeDisVisible:true,
+				isThoughtDisVisible:'',
+				isCodeDisVisible:'',
 				currentStudentTestDetail:{testDetail:''},
 				studentTestDetail:{}
 
@@ -117,8 +117,8 @@
 					this.$refs.msgDialog.confirm("获取失败")
 				})
 			},
-			answer(id){
-				alert(id)
+			answer(id,problemIndex){
+				
 				var url = this.HOST + '/addStuTestDetail'
 				this.currentStudentTestDetail.testDetail=id
 				this.$http.post(url,this.currentStudentTestDetail).then(response=>{
@@ -130,8 +130,7 @@
 						this.isAnswerDialogVisible=response.data.answerWithCodeSign
 					}
 					this.studentTestDetail = response.data
-					this.currentTest=this.studentTestDetail.studentTestDetail.testDetail.contents
-					console.log(response.data)
+					this.currentTest=this.problems[problemIndex].contents
 					this.thought=response.data.answerWithAlgorithm
 					this.code=response.data.answerWithCode
 				})
@@ -139,7 +138,7 @@
 
 			},
 			nextStep(){
-				if(this.isThoughtDisVisible=true){
+				if(this.isThoughtDisVisible==true){
 					this.$refs.msgDialog.confirm("你已提交过自然语言！")
 				}else{
 					this.studentTestDetail.answerWithAlgorithmSign=true
