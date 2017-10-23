@@ -102,6 +102,7 @@ import msgDialog from "./common/msgDialog"
 				isThoughtDisVisible:'',
 				isCodeDisVisible:'',
 				currentStudentTestDetail:{testDetail:''},
+				studentTestDetail:{testDetail:''}
 
 			}
 		},
@@ -122,10 +123,9 @@ import msgDialog from "./common/msgDialog"
 				})
 			},
 			answer(id,problemIndex){
-				
 				var url = this.HOST + '/addStuTestDetail'
-				this.currentStudentTestDetail.testDetail=id
-				this.$http.post(url,this.currentStudentTestDetail).then(response=>{
+				this.studentTestDetail.testDetail=id
+				this.$http.post(url,this.studentTestDetail).then(response=>{
 					if(response.data.studentTestDetail.answerWithAlgorithmSign==null){
 						this.isThoughtDisVisible=false
 						this.isCodeDisVisible=true
@@ -181,4 +181,4 @@ import msgDialog from "./common/msgDialog"
 			}
 		}
 	}
-</script>
+</script>                                                                                                             
