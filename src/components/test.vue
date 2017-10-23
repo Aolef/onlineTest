@@ -131,7 +131,7 @@
 						this.thought=response.data.studentTestDetail.answerWithAlgorithm
 						this.code=response.data.studentTestDetail.answerWithCode
 					}
-					this.studentTestDetail = response.data
+					this.studentTestDetail = response.data.studentTestDetail
 					this.currentTest=this.problems[problemIndex].contents
 					this.thought=response.data.answerWithAlgorithm
 					this.code=response.data.answerWithCode
@@ -147,6 +147,7 @@
 					this.studentTestDetail.answerWithCodeSign=false
 					this.studentTestDetail.answerWithAlgorithm=this.thought
 					var url = this.HOST + '/updateStudentTestDetail'
+					console.log(this.studentTestDetail)
 					this.$http.put(url,this.studentTestDetail).then(response=>{
 						this.studentTestDetail=response.data.studentTestDetail
 						this.thought=response.data.studentTestDetail.answerWithAlgorithm
