@@ -128,6 +128,8 @@
 					}else{
 						this.isThoughtDisVisible=response.data.answerWithAlgorithmSign
 						this.isAnswerDialogVisible=response.data.answerWithCodeSign
+						this.thought=response.data.studentTestDetail.answerWithAlgorithm
+						this.code=response.data.studentTestDetail.answerWithCode
 					}
 					this.studentTestDetail = response.data
 					this.currentTest=this.problems[problemIndex].contents
@@ -146,9 +148,9 @@
 					this.studentTestDetail.answerWithAlgorithm=this.thought
 					var url = this.HOST + '/updateStudentTestDetail'
 					this.$http.put(url,this.studentTestDetail).then(response=>{
-						this.studentTestDetail=response.data
-						this.thought=response.data.answerWithAlgorithm
-						this.code=response.data.answerWithCode
+						this.studentTestDetail=response.data.studentTestDetail
+						this.thought=response.data.studentTestDetail.answerWithAlgorithm
+						this.code=response.data.studentTestDetail.answerWithCode
 						this.isThoughtDisVisible=response.data.answerWithAlgorithmSign
 						this.isCodeDisVisible=response.data.answerWithCodeSign
 					})
