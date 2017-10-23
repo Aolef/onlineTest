@@ -86,9 +86,11 @@
 		    <el-button type="primary" @click="saveAnswer">提交代码</el-button>
 		  </span>
 		</el-dialog>
+		<msg-dialog ref="msgDialog"></msg-dialog>
 	</div>
 </template>
 <script type="text/javascript">
+import msgDialog from "./common/msgDialog"
 	export default{
 		data(){
 			return{
@@ -102,6 +104,9 @@
 				currentStudentTestDetail:{testDetail:''},
 
 			}
+		},
+		components:{
+			msgDialog
 		},
 		created(){
 			this.findAllProblems()
@@ -122,7 +127,6 @@
 				this.currentStudentTestDetail.testDetail=id
 				this.$http.post(url,this.currentStudentTestDetail).then(response=>{
 					if(response.data.studentTestDetail.answerWithAlgorithmSign==null){
-						alert("here")
 						this.isThoughtDisVisible=false
 						this.isCodeDisVisible=true
 					}else{
@@ -132,7 +136,6 @@
 					this.currentStudentTestDetail = response.data.studentTestDetail
 					this.currentTest=this.problems[problemIndex].contents
 					this.thought=response.data.studentTestDetail.answerWithAlgorithm
-					alert(this.thought)
 					this.code=response.data.studentTestDetail.answerWithCode
 				})
 				this.isAnswerDialogVisible=true
@@ -163,14 +166,15 @@
 			saveAnswer(){
 				if(this.currentStudentTestDetail.answerWithCodeSign==true&this.currentStudentTestDetail.answerWithAlgorithmSign==true){
 					this.$refs.msgDialog.confirm("你已提交试卷！")
-				}else if(this.currentStudentTestDetail.answerWithAlgorithm=false){
+				}else if(this.currentStudentTestDetail.answerWithAlgorithm==false){
 					this.$refs.msgDialog.confirm("请先提交自然语言！")
 				}else{
 					this.currentStudentTestDetail.answerWithCodeSign=true
 					this.currentStudentTestDetail.answerWithCode=this.code
 					var url = this.HOST + '/updateStudentTestDetail'
 					this.$http.put(url,this.currentStudentTestDetail).then(response=>{
-						this.$refs.msgDialog.notigy("答卷完成")
+						this.$refs.msgDialog.notify("答卷完成")
+						this.isCodeDisVisible=true
 						this.isAnswerDialogVisible=false
 					})
 				}
