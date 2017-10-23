@@ -100,7 +100,6 @@
 				isThoughtDisVisible:'',
 				isCodeDisVisible:'',
 				currentStudentTestDetail:{testDetail:''},
-				studentTestDetail:{}
 
 			}
 		},
@@ -122,19 +121,19 @@
 				var url = this.HOST + '/addStuTestDetail'
 				this.currentStudentTestDetail.testDetail=id
 				this.$http.post(url,this.currentStudentTestDetail).then(response=>{
-					if(!response.data.answerWithAlgorithmSign){
+					if(response.data.studentTestDetail.answerWithAlgorithmSign==null){
+						alert("here")
 						this.isThoughtDisVisible=false
 						this.isCodeDisVisible=true
 					}else{
-						this.isThoughtDisVisible=response.data.answerWithAlgorithmSign
-						this.isAnswerDialogVisible=response.data.answerWithCodeSign
-						this.thought=response.data.studentTestDetail.answerWithAlgorithm
-						this.code=response.data.studentTestDetail.answerWithCode
+						this.isThoughtDisVisible=response.data.studentTestDetail.answerWithAlgorithmSign
+						this.isCodeDisVisible=response.data.studentTestDetail.answerWithCodeSign
 					}
-					this.studentTestDetail = response.data.studentTestDetail
+					this.currentStudentTestDetail = response.data.studentTestDetail
 					this.currentTest=this.problems[problemIndex].contents
-					this.thought=response.data.answerWithAlgorithm
-					this.code=response.data.answerWithCode
+					this.thought=response.data.studentTestDetail.answerWithAlgorithm
+					alert(this.thought)
+					this.code=response.data.studentTestDetail.answerWithCode
 				})
 				this.isAnswerDialogVisible=true
 
@@ -143,17 +142,16 @@
 				if(this.isThoughtDisVisible==true){
 					this.$refs.msgDialog.confirm("你已提交过自然语言！")
 				}else{
-					this.studentTestDetail.answerWithAlgorithmSign=true
-					this.studentTestDetail.answerWithCodeSign=false
-					this.studentTestDetail.answerWithAlgorithm=this.thought
+					this.currentStudentTestDetail.answerWithAlgorithmSign=true
+					this.currentStudentTestDetail.answerWithCodeSign=false
+					this.currentStudentTestDetail.answerWithAlgorithm=this.thought
 					var url = this.HOST + '/updateStudentTestDetail'
-					console.log(this.studentTestDetail)
-					this.$http.put(url,this.studentTestDetail).then(response=>{
-						this.studentTestDetail=response.data.studentTestDetail
+					this.$http.put(url,this.currentStudentTestDetail).then(response=>{
+						this.currentStudentTestDetail=response.data.studentTestDetail
 						this.thought=response.data.studentTestDetail.answerWithAlgorithm
 						this.code=response.data.studentTestDetail.answerWithCode
-						this.isThoughtDisVisible=response.data.answerWithAlgorithmSign
-						this.isCodeDisVisible=response.data.answerWithCodeSign
+						this.isThoughtDisVisible=true
+						this.isCodeDisVisible=false
 					})
 				}
 			},
@@ -163,15 +161,15 @@
 				this.code=''
 			},
 			saveAnswer(){
-				if(this.studentTestDetail.answerWithCodeSign==true){
+				if(this.currentStudentTestDetail.answerWithCodeSign==true&this.currentStudentTestDetail.answerWithAlgorithmSign==true){
 					this.$refs.msgDialog.confirm("你已提交试卷！")
-				}else if(this.studentTestDetail.answerWithAlgorithm=false){
+				}else if(this.currentStudentTestDetail.answerWithAlgorithm=false){
 					this.$refs.msgDialog.confirm("请先提交自然语言！")
 				}else{
-					this.studentTestDetail.answerWithCodeSign=true
-					this.studentTestDetail.answerWithCode=this.code
+					this.currentStudentTestDetail.answerWithCodeSign=true
+					this.currentStudentTestDetail.answerWithCode=this.code
 					var url = this.HOST + '/updateStudentTestDetail'
-					this.$http.put(url,this.studentTestDetail).then(response=>{
+					this.$http.put(url,this.currentStudentTestDetail).then(response=>{
 						this.$refs.msgDialog.notigy("答卷完成")
 						this.isAnswerDialogVisible=false
 					})
