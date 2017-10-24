@@ -205,7 +205,7 @@
 				label="满分"
 				prop='fullScore'>
 					<el-col :span='6'>
-					<el-input v-model="editTestDetailData.fullScore" ></el-input>
+					<el-input v-model="editTestDetailData.fullScore"></el-input>
 					</el-col>
 				</el-form-item>
 				<el-button @click="saveEditTestDetail('ruleForm')">确定</el-button>
@@ -260,10 +260,10 @@ import msgDialog from '../components/common/msgDialog.vue'
 				page:1,
 				rows:10,
 				options: [{
-		          value: 'true',
+		          value: "true",
 		          label: '是'
 		        }, {
-		          value: 'false',
+		          value: "false",
 		          label: '否'
 		        }],
 		        allKinds: [{
@@ -315,6 +315,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 				this.$http.get(url).then(response=>{
 					this.testBasicData=response.data.rows
 					this.testBasicDataTotal=response.data.total
+					// console.log(JSON.stringify(this.testBasicData))
 					for(var item in this.testBasicData){
 						if (this.testBasicData[item].toConduct==null) {
 							this.testBasicData[item].toConduct='否'
@@ -364,6 +365,12 @@ import msgDialog from '../components/common/msgDialog.vue'
 						var url = this.HOST+'/addTest'
 						var time = this.addTestData.dateTime
 						this.addTestData.dateTime=moment(time).format("YYYY-MM-DD")
+						// console.log(JSON.stringify(this.addTestData))
+						if (this.addTestData.toConduct=="false") {
+							this.addTestData.toConduct=false
+						}else{
+							this.addTestData.toConduct=true
+						}
 						this.$http.post(url,this.addTestData).then(response=>{
 							this.getAllTestBasicData()
 							this.$refs.msgDialog.notify("成功添加考试！")
@@ -406,6 +413,11 @@ import msgDialog from '../components/common/msgDialog.vue'
 						var url = this.HOST+'/updateTest'
 						var time = this.editTestData.dateTime
 						this.editTestData.dateTime=moment(time).format("YYYY-MM-DD")
+						if (this.editTestData.toConduct=="false") {
+							this.editTestData.toConduct=false
+						}else{
+							this.editTestData.toConduct=true
+						}
 						this.$http.put(url,this.editTestData).then(response=>{
 							this.getAllTestBasicData()
 							this.$refs.msgDialog.notify("成功修改考试！")
@@ -515,14 +527,14 @@ import msgDialog from '../components/common/msgDialog.vue'
 							// this.editTestDetailData.kind=''
 							// this.editTestDetailData.fullScore=''
 							// this.editTestDetailData.test=''
-							// this.currentTestDetailId=''
+							this.currentTestDetailId=''
 							this.showEditDetailDialog=false
 						}).catch(response=>{
 							this.$refs.msgDialog.notify("修改考试题目失败！")
 						})
 					}else{
-						alert(JSON.stringify(valid))
-						// this.$refs.msgDialog.confirm("请检查增加信息,请正确填写")
+						// alert(JSON.stringify(valid))
+						this.$refs.msgDialog.confirm("请检查增加信息,请正确填写")
 	            		return false;
 					}
 				})
