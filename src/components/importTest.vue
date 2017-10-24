@@ -61,10 +61,13 @@
 				this.$http.get(url).then(response=>{
 					this.testBasicData=response.data.rows
 					this.testBasicDataTotal=response.data.total
+					console.log(JSON.stringify(this.testBasicData))
 					for(var item in this.testBasicData){
 						if (this.testBasicData[item].toConduct==null) {
 							this.testBasicData[item].toConduct='否'
-						}else{
+						}else if (this.testBasicData[item].toConduct==false) {
+							this.testBasicData[item].toConduct='否'
+						}else {
 							this.testBasicData[item].toConduct='是'
 						}
 					}
