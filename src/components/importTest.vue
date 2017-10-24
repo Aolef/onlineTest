@@ -1,7 +1,5 @@
 <template>
 <div>
-	
-
 	<el-row>
 		<el-table
 		:data="testBasicData"
@@ -18,7 +16,7 @@
 		label="考试时间"
 		></el-table-column>	
 		<el-table-column
-		prop="isToConduct"
+		prop="toConduct"
 		label="当前考试"
 		></el-table-column>	
 		<el-table-column
@@ -63,6 +61,13 @@
 				this.$http.get(url).then(response=>{
 					this.testBasicData=response.data.rows
 					this.testBasicDataTotal=response.data.total
+					for(var item in this.testBasicData){
+						if (this.testBasicData[item].toConduct==null) {
+							this.testBasicData[item].toConduct='否'
+						}else{
+							this.testBasicData[item].toConduct='是'
+						}
+					}
 				}).catch(response=>{
 					this.$refs.msgDialog.confirm("获取所有考试信息失败!")
 				})
