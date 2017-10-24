@@ -46,6 +46,7 @@
 		  title="开始作答"
 		  :visible.sync="isAnswerDialogVisible"
 		  size="large"
+		  :before-close="handleClose"
 		  >
 		  <el-row>
 			<el-col :span="24">
@@ -178,7 +179,14 @@ import msgDialog from "./common/msgDialog"
 						this.isAnswerDialogVisible=false
 					})
 				}
-			}
+			},
+			handleClose(done) {
+		        this.$confirm('关闭后，你未提交的内容将被清空，确认关闭？','提示')
+		          .then(_ => {
+		            done();
+		          })
+		          .catch(_ => {});
+      		}
 		}
 	}
 </script>                                                                                                             
