@@ -315,7 +315,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 				this.$http.get(url).then(response=>{
 					this.testBasicData=response.data.rows
 					this.testBasicDataTotal=response.data.total
-					console.log(JSON.stringify(this.testBasicData))
+					// console.log(JSON.stringify(this.testBasicData))
 					for(var item in this.testBasicData){
 						if (this.testBasicData[item].toConduct==null) {
 							this.testBasicData[item].toConduct='否'
