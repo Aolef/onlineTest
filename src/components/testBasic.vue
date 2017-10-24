@@ -318,6 +318,8 @@ import msgDialog from '../components/common/msgDialog.vue'
 					for(var item in this.testBasicData){
 						if (this.testBasicData[item].toConduct==null) {
 							this.testBasicData[item].toConduct='否'
+						}else if (this.testBasicData[item].toConduct==false) {
+							this.testBasicData[item].toConduct='否'
 						}else{
 							this.testBasicData[item].toConduct='是'
 						}
