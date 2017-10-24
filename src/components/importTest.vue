@@ -75,11 +75,13 @@
 			},
 			importTest:function(val){
 				var url=this.HOST+'/exportExcel?id='+val.id
-				this.$http.get(url).then(response=>{
-					this.$refs.msgDialog.notify("成功导出Excel至桌面!")
-				}).catch(response=>{
-					this.$refs.msgDialog.notify("导出excel失败!")
-				})
+				window.location.href = url;
+				// this.$http.get(url).then(response=>{
+				// 	console.log(response.msg)
+				// 	this.$refs.msgDialog.notify(response.msg+"成功导出Excel至桌面!")
+				// }).catch(response=>{
+				// 	this.$refs.msgDialog.notify("导出excel失败!")
+				// })
 			},
 		},
 		components:{
