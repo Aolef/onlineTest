@@ -83,7 +83,7 @@
 			</el-row>
 		</el-col>
 		<el-dialog v-model="showAddDialog" title="增加">
-			<el-form :model="addTestData" :rules="rules" ref="ruleForm">
+			<el-form :model="addTestData" :rules="rules" ref="ruleForm1">
 				<el-form-item
 				label='考试名称' 
 				prop="name">
@@ -101,8 +101,8 @@
 				</el-form-item>
 				<el-form-item
 				label='是否当前考试'
-				prop='isToConduct'>
-				  <el-select v-model="addTestData.isToConduct" placeholder="请选择">
+				prop='toConduct'>
+				  <el-select v-model="addTestData.toConduct" placeholder="请选择">
 				    <el-option
 				      v-for="item in options"
 				      :key="item.value"
@@ -111,12 +111,12 @@
 				    </el-option>
 				  </el-select>
 				</el-form-item>
-				<el-button @click="saveAdd('ruleForm')">提交</el-button>
+				<el-button @click="saveAdd('ruleForm1')">提交</el-button>
 				<el-button @click="cancelAdd">取消</el-button>
 			</el-form>
 		</el-dialog>
 		<el-dialog v-model="showEditDialog">
-			<el-form :model="editTestData" title="修改" :rules="rules" ref="ruleForm">
+			<el-form :model="editTestData" title="修改" :rules="rules" ref="ruleForm2">
 				<el-form-item
 				label='考试名称'
 				prop='name'>
@@ -134,8 +134,8 @@
 				</el-form-item>
 				<el-form-item
 				label='是否当前考试'
-				prop='isToConduct'>
-				  <el-select v-model="editTestData.isToConduct" placeholder="请选择">
+				prop='toConduct'>
+				  <el-select v-model="editTestData.toConduct" placeholder="请选择">
 				    <el-option
 				      v-for="item in options"
 				      :key="item.value"
@@ -144,12 +144,12 @@
 				    </el-option>
 				  </el-select>
 				</el-form-item>
-				<el-button @click="saveEdit('ruleForm')">提交</el-button>
+				<el-button @click="saveEdit('ruleForm2')">提交</el-button>
 				<el-button @click="cancelEdit">取消</el-button>
 			</el-form>
 		</el-dialog>
 		<el-dialog v-model="showAddDetailDialog" title="增加">
-			<el-form :model="addTestDetailData" :rules="rules" ref="ruleForm">
+			<el-form :model="addTestDetailData" :rules="rules" ref="ruleForm3">
 				<el-form-item
 				label="题目"
 				prop='contents'>
@@ -176,12 +176,12 @@
 						<el-input v-model="addTestDetailData.fullScore"></el-input>
 					</el-col>			
 				</el-form-item>
-				<el-button @click="saveAddTestDetail('ruleForm')">确定</el-button>
+				<el-button @click="saveAddTestDetail('ruleForm3')">确定</el-button>
 				<el-button @click="cancelAddTestDetail">取消</el-button>
 			</el-form>
 		</el-dialog>
 		<el-dialog v-model="showEditDetailDialog" title="修改" >
-			<el-form :model="editTestDetailData" :rules="rules" ref="ruleForm">
+			<el-form :model="editTestDetailData" :rules="rules" ref="ruleForm4">
 				<el-form-item
 				label="题目"
 				prop='contents'>
@@ -208,7 +208,7 @@
 					<el-input v-model="editTestDetailData.fullScore"></el-input>
 					</el-col>
 				</el-form-item>
-				<el-button @click="saveEditTestDetail('ruleForm')">确定</el-button>
+				<el-button @click="saveEditTestDetail('ruleForm4')">确定</el-button>
 				<el-button @click="cancelEditTestDetail">取消</el-button>
 			</el-form>
 		</el-dialog>
@@ -236,7 +236,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 				addTestData:{
 					name:'',
 					dateTime:'',
-					isToConduct:''
+					toConduct:''
 				},
 				addTestDetailData:{
 					contents:'',
@@ -248,7 +248,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 					id:'',
 					name:'',
 					dateTime:'',
-					isToConduct:''
+					toConduct:''
 				},
 				editTestDetailData:{
 					id:'',
@@ -299,7 +299,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 		        rules:{
 					name:[{ required:true, message:'必填项', trigger:'blur'&'change' }],
 					dateTime:[{ required:true, message:'必填项', trigger:'blur'&'change' }],
-					isToConduct:[{ required: true, message: '必选项', trigger: 'blur'&'change' }],
+					toConduct:[{ required: true, message: '必选项', trigger: 'blur'&'change' }],
 					contents:[{ required: true, message: '必填项', trigger: 'blur'&'change' }],
 					kind:[{ required: true, message: '必选项', trigger: 'blur'&'change' }],
 					fullScore:[{ required: true, message: '必填项', trigger: 'blur'&'change' }],
@@ -365,7 +365,8 @@ import msgDialog from '../components/common/msgDialog.vue'
 						var url = this.HOST+'/addTest'
 						var time = this.addTestData.dateTime
 						this.addTestData.dateTime=moment(time).format("YYYY-MM-DD")
-						// console.log(JSON.stringify(this.addTestData))
+						 console.log(JSON.stringify(this.addTestData))
+						 console.log(this.addTestData.toConduct)
 						if (this.addTestData.toConduct=="false") {
 							this.addTestData.toConduct=false
 						}else{
@@ -376,7 +377,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 							this.$refs.msgDialog.notify("成功添加考试！")
 							this.addTestData.name=''
 							this.addTestData.dateTime=''
-							this.addTestData.isToConduct=''
+							this.addTestData.toConduct=''
 							this.currentRowId=''
 							this.showAddDialog=false
 						}).catch(response=>{
@@ -392,7 +393,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 			cancelAdd:function(){
 				this.addTestData.name=''
 				this.addTestData.dateTime=''
-				this.addTestData.isToConduct=''
+				this.addTestData.toConduct=''
 				this.showAddDialog=false
 			},
 			editTest:function(){
@@ -403,7 +404,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 					this.editTestData.id=this.currentRow.id
 					this.editTestData.name=this.currentRow.name
 					this.editTestData.dateTime=this.currentRow.dateTime
-					this.editTestData.isToConduct=this.currentRow.isToConduct
+					this.editTestData.toConduct=this.currentRow.toConduct
 					this.showEditDialog=true
 				}
 			},
@@ -413,7 +414,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 						var url = this.HOST+'/updateTest'
 						var time = this.editTestData.dateTime
 						this.editTestData.dateTime=moment(time).format("YYYY-MM-DD")
-						if (this.editTestData.toConduct=="false") {
+						if (this.editTestData.tooConduct=="false") {
 							this.editTestData.toConduct=false
 						}else{
 							this.editTestData.toConduct=true
@@ -441,7 +442,7 @@ import msgDialog from '../components/common/msgDialog.vue'
 				this.editTestData.id=''
 				this.editTestData.name=''
 				this.editTestData.dateTime=''
-				this.editTestData.isToConduct=''
+				this.editTestData.toConduct=''
 				this.showEditDialog=false
 			},
 			deleteTest:function(){
